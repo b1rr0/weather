@@ -1,9 +1,10 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
+import { WeatherController } from './controllers/weather.controller';
 import { WeatherModule } from './domens/weather/weather.module';
 
 @Module({
-  controllers: [AppController],
+  imports: [WeatherModule],
+  controllers: [WeatherController],
   providers: [WeatherModule],
 })
 export class AppModule {}

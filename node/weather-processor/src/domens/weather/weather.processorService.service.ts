@@ -3,10 +3,11 @@ import { RecentWeatherRepository as RecentWeatherRedisRepository } from './recen
 import Redlock from 'redlock';
 import { redLock } from '../../config/redis.config';
 import { WeatherapiService } from '../weatherapi.service';
+import { WeatherDto } from './dto/weather.dto';
 @Injectable()
 export class WeatherProcessorService {
   private redlock: Redlock;
-  private readonly LOCK_PREFIX = 'weather:lock:';
+  private readonly LOCK_PREFIX = 'city:lock:';
   private readonly LOCK_EXPIRATION_TIME = 5000;
 
   constructor(
@@ -16,11 +17,14 @@ export class WeatherProcessorService {
     this.redlock = redLock;
   }
 
-  async getData(key: string) {
+  async getData(key: string): Promise<WeatherDto> {
     const cachedData = await this.recentWeatherRedisRepository.getByCity(key);
+    console.log('dddd', cachedData);
+
     if (cachedData) {
       return cachedData;
     }
+    console.log('cachedData', cachedData);
     const lock = await this.createLock(key);
 
     try {
@@ -31,12 +35,14 @@ export class WeatherProcessorService {
       }
 
       const weatherData = await this.weatherapiService.calculateWeather(key);
+      const weatherResponse: WeatherDto = {
+        temperature: weatherData.temperature,
+        description: weatherData.description,
+        humidity: weatherData.humidity,
+      };
 
-      await this.recentWeatherRedisRepository.setByCity(key, {
-        key,
-        value: weatherData,
-      });
-      return JSON.stringify(weatherData);
+      await this.recentWeatherRedisRepository.setByCity(key, weatherResponse);
+      return weatherResponse;
     } finally {
       await lock.release();
     }

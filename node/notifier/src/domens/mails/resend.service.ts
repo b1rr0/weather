@@ -1,14 +1,22 @@
-import { Injectable } from '@nestjs/common';
-import { CreateEmailOptions, Resend } from 'resend';
+import { Injectable, Logger } from '@nestjs/common';
+import * as nodemailer from 'nodemailer';
 import { MailsService } from './mails.service';
 import { WeatherWithCityDto } from '../weather/dto/weather.dto';
 
 @Injectable()
-export class ResendService implements MailsService {
-  private readonly resend: Resend;
+export class MailtraDemoApiService implements MailsService {
+  private readonly transport: nodemailer.Transporter;
+  logger = new Logger(MailtraDemoApiService.name);
 
   constructor() {
-    this.resend = new Resend('re_KMywtJJ1_PnK5y8QcZ2DG5wRJbHymFb42');
+    this.transport = nodemailer.createTransport({
+      host: 'sandbox.smtp.mailtrap.io',
+      port: 2525,
+      auth: {
+        user: '18db126378bbd8',
+        pass: '7106eed43b0fa3',
+      },
+    });
   }
 
   async sendWeatherMail(
@@ -17,7 +25,7 @@ export class ResendService implements MailsService {
   ): Promise<void> {
     const subject = 'Weather Notification';
     const content = `<p>Hello ${email},</p>
-    <p>The weather in ${weather.city} is ${weather.temperature}°C and ${weather.description}</p>
+    <p>The weather in ${weather.city} is ${weather.temperature}°C ${weather.humidity}% and ${weather.description}</p>
     <p>Thank you</p>
     `;
     await this.sendMail(email, subject, content);
@@ -30,6 +38,7 @@ export class ResendService implements MailsService {
     <p>Please use it to login</p>
     <p>Thank you</p>
     `;
+
     await this.sendMail(email, subject, content);
   }
 
@@ -38,12 +47,14 @@ export class ResendService implements MailsService {
     subject: string,
     content: string,
   ): Promise<void> {
-    const mailOptions: CreateEmailOptions = {
-      from: 'Acme <onboarding@resend.dev>',
+    const mailOptions = {
+      from: 'Acme <noreply@example.com>',
       to: email,
       subject: subject,
       html: content,
     };
-    await this.resend.emails.send(mailOptions);
+    // thats work with DemoApi so u cant see real message:(
+    this.logger.debug(mailOptions);
+    await this.transport.sendMail(mailOptions);
   }
 }

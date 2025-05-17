@@ -1,8 +1,8 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { WeatherProcessorService } from './domens/weather/weather.processorService.service';
+import { WeatherProcessorService } from '../domens/weather/weather.processorService.service';
 
 @Controller()
-export class AppController {
+export class WeatherController {
   constructor(private readonly appService: WeatherProcessorService) {}
 
   @Get('weather')

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import axios from 'axios';
 import { WeatherDto } from './weather/dto/weather.dto';
 
@@ -26,11 +26,12 @@ export class WeatherapiService {
       return weatherData;
     } catch (error) {
       if (axios.isAxiosError(error)) {
+        console.log('error', error);
         if (
           error.response?.status === 400 ||
           error.response?.data?.error?.code === 1006
         ) {
-          throw new Error('No matching location found.', { cause: 404 });
+          throw new NotFoundException('No matching location found.');
         }
       }
       throw error;

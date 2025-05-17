@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
-import { ResendService } from './resend.service';
+import { MailtraDemoApiService } from './resend.service';
 
 @Module({
   imports: [],
   controllers: [],
-  providers: [ResendService],
+  providers: [MailtraDemoApiService],
 })
 export class MailsModule {}

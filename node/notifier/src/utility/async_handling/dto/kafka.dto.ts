@@ -18,3 +18,8 @@ export class AsyncMessage {
   data: MailRegistrationNotification | MailWeatherNotification;
   key: string;
 }
+
+export enum Topic {
+  SUBSCRIPTION = 'subscription',
+  WEATHER = 'weather',
+}

@@ -30,11 +30,11 @@ export class EventEntity {
   type: EventType;
 
   @Column({
-    type: 'varchar',
+    type: 'jsonb',
     name: 'data',
     nullable: false,
   })
-  data: string;
+  data: any;
 
   @CreateDateColumn({
     type: 'timestamp',

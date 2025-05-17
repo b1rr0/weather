@@ -5,7 +5,11 @@ import { EventRepository } from './event.repository.ts';
 import { EventEntity } from '../../entities/event.entity';
 import { KafkaService } from 'src/utils/kafka/kafka.service';
 import { Cron, CronExpression } from '@nestjs/schedule';
-
+import {
+  AsyncMessageType,
+  MailRegistrationNotification,
+  Topic,
+} from 'src/utils/kafka/dto/kafka.dto';
 @Injectable()
 export class EventService {
   constructor(
@@ -18,7 +22,7 @@ export class EventService {
     data: any,
   ) {
     const event = this.eventRepository.create({
-      data: JSON.stringify(data),
+      data: data,
       type: EventType.SUBSCRIPTION,
       status: ProcessStatus.PENDING,
     });
@@ -27,7 +31,6 @@ export class EventService {
   }
 
   //TO DO  add hendling for infinity PROCESSING events (after crash or other problems)
-  @Cron(CronExpression.EVERY_10_SECONDS)
   async sendEvent() {
     const events = await this.eventRepository.findBy({
       status: ProcessStatus.PENDING,
@@ -49,13 +52,20 @@ export class EventService {
 
   private async processEvent(event: EventEntity) {
     try {
-      const data = JSON.parse(event.data);
-      await this.kafkaService.write('subscription', event.id.toString(), data);
+      const data = event.data as MailRegistrationNotification;
+      const message = {
+        type: AsyncMessageType.MAIL_REGISTRATION_NOTIFICATION,
+        data,
+        key: event.id,
+      };
+
+      await this.kafkaService.write(Topic.SUBSCRIPTION, event.id, message);
       await this.eventRepository.update(event.id, {
         status: ProcessStatus.COMPLETED,
       });
+
     } catch (error) {
-      console.error(error);
+      console.error('Failed to process event:', error);
       await this.eventRepository.update(event.id, {
         status: ProcessStatus.PENDING,
       });

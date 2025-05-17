@@ -9,6 +9,8 @@ import { SubscrubeModule } from './doments/subscription/subscrube.module';
 import { WeatherModule } from './doments/weather/weather.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventModule } from './doments/event/event.module';
+import { WeatherController } from './controllers/weather.controller';
+import { CronModule } from './cron/cron.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -20,8 +22,9 @@ import { EventModule } from './doments/event/event.module';
     WeatherModule,
     ScheduleModule.forRoot(),
     EventModule,
+    CronModule,
   ],
-  controllers: [SubscriptionController],
+  controllers: [SubscriptionController, WeatherController],
   providers: [HasherService, SubscrubeModule, WeatherModule, EventModule],
 })
 export class AppModule {}

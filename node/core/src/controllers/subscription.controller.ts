@@ -3,8 +3,6 @@ import { ApiOperation, ApiParam, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateSubscriptionDto } from '../doments/subscription/dto/subscription.dto';
 import { SubscribeService } from 'src/doments/subscription/subscribe.service';
 import { WeatherService } from 'src/doments/weather/weather.service';
-import { WeatherDto } from 'src/doments/weather/dto/weather.dto';
-
 @ApiTags('subscription')
 @Controller()
 export class SubscriptionController {
@@ -12,20 +10,6 @@ export class SubscriptionController {
     private readonly subscribeService: SubscribeService,
     private readonly weatherService: WeatherService,
   ) {}
-
-  @Get('weather')
-  @ApiOperation({ summary: 'Get current weather for a city' })
-  @ApiParam({
-    name: 'city',
-    description: 'City name',
-    required: true,
-    type: String,
-  })
-  @ApiResponse({ status: 200, description: 'Weather data' })
-  @ApiResponse({ status: 400, description: 'Invalid city name' })
-  async getWeather(@Param('city') city: string): Promise<WeatherDto> {
-    return this.weatherService.getWeather(city);
-  }
 
   @Post()
   @ApiOperation({ summary: 'Subscribe to weather updates' })
@@ -38,7 +22,8 @@ export class SubscriptionController {
   async subscribe(
     @Body() createSubscriptionDto: CreateSubscriptionDto,
   ): Promise<void> {
-    console.log('New subscription:', createSubscriptionDto);
+    // TODO: REFACTOR THIS CITY validation
+    await this.weatherService.getWeather(createSubscriptionDto.city);
     await this.subscribeService.createSubscription(createSubscriptionDto);
   }
 
@@ -57,6 +42,7 @@ export class SubscriptionController {
   @ApiResponse({ status: 400, description: 'Invalid token' })
   @ApiResponse({ status: 404, description: 'Token not found' })
   async confirmSubscription(@Param('token') token: string): Promise<void> {
+    console.log('token', token);
     await this.subscribeService.confirmSubscription(token);
   }
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import e from 'express';
 import { Producer, Kafka } from 'kafkajs';
+import { AsyncMessage } from './dto/kafka.dto';
 
 @Injectable()
 export class KafkaService {
@@ -25,7 +26,7 @@ export class KafkaService {
     }
   }
 
-  async write(topic: string, key: string, message: any) {
+  async write(topic: string, key: string, message: AsyncMessage) {
     try {
       await this.producer.send({
         topic,

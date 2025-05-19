@@ -18,7 +18,10 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 
 Cache
 ### Running the Application
-docker-compose up --build
+docker-compose up --build 
+And go there
+#http://localhost:3330/v1/swagger#/
+
 
 ### Migrations are managed as part of Docker — 'migrations'
 ###  Because it's a separate job and is triggered independently (not the best practice, but a workaround to make it work on startup)

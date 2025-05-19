@@ -13,7 +13,7 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 ### Prerequisites
 - Docker
 - Docker Compose
-- Read notifier. README.md (for reciving emails) 
+- Read notifier. README.md (for receiving emails) 
 
 
 Cache

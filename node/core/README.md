@@ -31,9 +31,10 @@ For reliable user registration, we use the Outbox pattern:
 The service includes a scheduled cronjob that handles weather notifications:
 Runs every hour/day to check weather conditions.
 Writes events to Kafka for reliable delivery.
-// Handle case where app crashes here Promise.all.. And not all events are processed
-// Altho can be done with outbox pattern, but i got out of time :(
-// Create events after Hour/Day cronjob and send with outbox cronjobe 
+### improvements
+Handle case where app crashes here Promise.all.. And not all events are processed
+Altho can be done with outbox pattern, but i got out of time :(
+Create events after Hour/Day cronjob and send with outbox cronjobe 
 
 
 

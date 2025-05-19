@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { CacheRepository } from './cache.repo';
 import { AsyncHandlingService } from './async_hendling.service';
 import { WeatherService } from 'src/domens/weather/weather.service';
-import { MailtraDemoApiService } from 'src/domens/mails/resend.service';
+import { MailtraDemoApiService } from 'src/domens/mails/mailtra.demo.service';
 @Module({
   imports: [],
   providers: [

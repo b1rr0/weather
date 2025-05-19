@@ -10,7 +10,7 @@ const { REDIS_HOST } = process.env;
  * Redis client instance, created for caching.\
  */
 export const redisClient: Redis = new Redis({
-  host: REDIS_HOST ?? 'localhost',
+  host: REDIS_HOST ?? 'host.docker.internal',
   port: 6379,
 });
 

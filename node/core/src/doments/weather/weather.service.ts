@@ -1,17 +1,20 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable, Logger } from '@nestjs/common';
 import { WeatherDto } from './dto/weather.dto';
 import axios from 'axios';
 
 @Injectable()
 export class WeatherService {
-  private readonly WEATHER_SERVICE_URL = 'http://localhost:3333';
-  private readonly GET_WEATHER_URL = `${this.WEATHER_SERVICE_URL}/weather`;
+  private readonly logger = new Logger(WeatherService.name);
+  private readonly GET_WEATHER_URL = `${process.env.WEATHER_SERVICE_URL}/weather`;
 
   async getWeather(city: string): Promise<WeatherDto> {
+    this.logger.debug(`Getting weather data for city: ${city}`);
     try {
       const response = await this.fetchWeatherData(city);
+      this.logger.log(`Successfully retrieved weather data for ${city}`);
       return response.data;
     } catch (error) {
+      this.logger.error(`Error getting weather data for ${city}`);
       this.handleWeatherError(error);
     }
   }

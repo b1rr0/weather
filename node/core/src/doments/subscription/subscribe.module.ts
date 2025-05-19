@@ -18,4 +18,4 @@ import { KafkaModule } from 'src/utils/kafka/kafka.module';
   providers: [SubscribeService, SubsribeRepository],
   exports: [SubscribeService, SubsribeRepository],
 })
-export class SubscrubeModule {}
+export class SubscribeModule {}

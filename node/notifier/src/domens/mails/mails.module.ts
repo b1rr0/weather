@@ -1,5 +1,5 @@
 import { Module } from '@nestjs/common';
-import { MailtraDemoApiService } from './resend.service';
+import { MailtraDemoApiService } from './mailtra.demo.service';
 
 @Module({
   imports: [],

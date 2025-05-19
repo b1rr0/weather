@@ -1,4 +1,9 @@
-import { Injectable, Logger, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Injectable,
+  Logger,
+  NotFoundException,
+} from '@nestjs/common';
 import { HasherService } from '../../utils/hasher/hasher.service';
 import { SubsribeRepository } from './subscribe.repository';
 import { CreateSubscriptionDto } from './dto/subscription.dto';
@@ -9,7 +14,6 @@ import { MailRegistrationNotification } from 'src/utils/kafka/dto/kafka.dto';
 import { SubscribeType } from './dto/subscribe.type';
 import { KafkaService } from 'src/utils/kafka/kafka.service';
 import { Topic } from 'src/utils/kafka/dto/kafka.dto';
-import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class SubscribeService {
@@ -23,6 +27,14 @@ export class SubscribeService {
   ) {}
 
   async createSubscription(createSubscriptionDto: CreateSubscriptionDto) {
+    const subscribtionWithSameEmail =
+      await this.subscriptionRepository.findByEmail(
+        createSubscriptionDto.email,
+      );
+    if (subscribtionWithSameEmail) {
+      throw new ConflictException('Email already exists');
+    }
+
     const subscription = this.subscriptionRepository.create({
       subscribeType: createSubscriptionDto.frequency,
       email: createSubscriptionDto.email,
@@ -55,7 +67,9 @@ export class SubscribeService {
 
   async confirmSubscription(token: string): Promise<void> {
     const hashedToken = await this.hasherService.hashData(token);
-    console.log('hashedToken', hashedToken);
+    this.logger.debug(
+      `Confirming subscription with hashed token: ${hashedToken}`,
+    );
     const subscription =
       await this.subscriptionRepository.findByToken(hashedToken);
     if (!subscription) {
@@ -63,6 +77,7 @@ export class SubscribeService {
     }
     subscription.isConfirmed = true;
     await this.subscriptionRepository.save(subscription);
+    this.logger.log(`Subscription confirmed for email: ${subscription.email}`);
   }
 
   async unsubscribe(token: string): Promise<void> {
@@ -73,17 +88,23 @@ export class SubscribeService {
       throw new NotFoundException('Token not found');
     }
     await this.subscriptionRepository.remove(subscription);
+    this.logger.log(`Unsubscribed user with email: ${subscription.email}`);
   }
 
+  //TODO: Handle case where app crashes here Promise.all.. And not all events are processed
   async processCroneEvent(subscribeType: SubscribeType) {
     const subscriptions = await this.subscriptionRepository.findBy({
       subscribeType,
       isConfirmed: true,
     });
     if (subscriptions.length === 0) {
+      this.logger.debug(`No subscriptions found for type: ${subscribeType}`);
       return;
     }
 
+    this.logger.log(
+      `Processing ${subscriptions.length} subscriptions for type: ${subscribeType}`,
+    );
     await Promise.all(
       subscriptions.map((subscription) =>
         this.process(
@@ -105,10 +126,12 @@ export class SubscribeService {
         },
         key,
       };
-      console.log('message', message);
+      this.logger.debug(
+        `Sending weather notification message: ${JSON.stringify(message)}`,
+      );
       await this.kafkaService.write(Topic.WEATHER, key, message);
     } catch (error) {
-      console.error('Failed to process event:', error);
+      this.logger.error('Failed to process event:', error);
     }
   }
 }

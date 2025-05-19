@@ -2,7 +2,65 @@ version: '3.8'
 
 services:
 
-  
+  core:
+    build:
+      context: ./core
+      dockerfile: Dockerfile
+    ports:
+      - "3330:3330"
+    env_file:
+      - ./core/.env
+    depends_on:
+      - postgres
+      - kafka
+      - redis
+      - zookeeper
+      - migrations
+    environment:
+      - KAFKA_BROKERS=kafka:29092
+
+  migrations:
+    build:
+      context: ./core
+      dockerfile: DockerfileMigration
+    depends_on:
+      - postgres
+    env_file:
+      - ./core/.env   
+    environment:
+      - POSTGRES_USER=${DB_USERNAME}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_DATABASE}
+      - POSTGRES_HOST=postgres
+    restart: on-failure    
+      
+  notifier:
+    build:
+      context: ./notifier
+      dockerfile: Dockerfile
+    ports:
+      - "3331:3331"
+    env_file:
+      - ./notifier/.env
+    depends_on:
+      - postgres
+      - kafka
+      - redis
+      - zookeeper
+
+  weather-processor:
+    build:
+      context: ./weather-processor
+      dockerfile: Dockerfile
+    ports:
+      - "3332:3332"
+    depends_on:
+      - postgres
+      - kafka
+      - redis
+      - zookeeper
+    env_file:
+      - ./weather-processor/.env
   redis:
     image: redis:alpine
     ports:
@@ -25,7 +83,7 @@ services:
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://host.docker.internal:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
@@ -40,6 +98,5 @@ services:
       - POSTGRES_DB=${DB_DATABASE}
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
 volumes:
   postgres_data: 

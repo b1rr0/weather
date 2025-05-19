@@ -8,9 +8,11 @@ import {
   PrimaryGeneratedColumn,
   Entity,
   Column,
+  Index,
 } from 'typeorm';
 
 @Entity('events')
+@Index('idx_events_status_type', ['status', 'type'])
 export class EventEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;

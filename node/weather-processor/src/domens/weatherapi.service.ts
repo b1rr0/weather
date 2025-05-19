@@ -26,7 +26,6 @@ export class WeatherapiService {
       return weatherData;
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.log('error', error);
         if (
           error.response?.status === 400 ||
           error.response?.data?.error?.code === 1006

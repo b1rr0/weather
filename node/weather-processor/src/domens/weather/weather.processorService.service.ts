@@ -19,12 +19,10 @@ export class WeatherProcessorService {
 
   async getData(key: string): Promise<WeatherDto> {
     const cachedData = await this.recentWeatherRedisRepository.getByCity(key);
-    console.log('dddd', cachedData);
 
     if (cachedData) {
       return cachedData;
     }
-    console.log('cachedData', cachedData);
     const lock = await this.createLock(key);
 
     try {

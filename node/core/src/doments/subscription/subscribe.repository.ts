@@ -12,6 +12,10 @@ export class SubsribeRepository extends Repository<SubsribeEntity> {
     super(repository.target, repository.manager, repository.queryRunner);
   }
 
+  findByEmail(email: string): Promise<SubsribeEntity | null> {
+    return this.findOneBy({ email: email });
+  }
+
   findByToken(token: string): Promise<SubsribeEntity | null> {
     return this.findOneBy({ token: token });
   }

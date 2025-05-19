@@ -5,7 +5,7 @@ import { dbConfig } from './configs/typeorm.config';
 import { HasherService } from './utils/hasher/hasher.service';
 import { SubscriptionController } from './controllers/subscription.controller';
 import { HasherModule } from './utils/hasher/hasher.module';
-import { SubscrubeModule } from './doments/subscription/subscrube.module';
+import { SubscribeModule } from './doments/subscription/subscribe.module';
 import { WeatherModule } from './doments/weather/weather.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { EventModule } from './doments/event/event.module';
@@ -18,13 +18,13 @@ import { CronModule } from './cron/cron.module';
     }),
     TypeOrmModule.forRoot(dbConfig),
     HasherModule,
-    SubscrubeModule,
+    SubscribeModule,
     WeatherModule,
     ScheduleModule.forRoot(),
     EventModule,
     CronModule,
   ],
   controllers: [SubscriptionController, WeatherController],
-  providers: [HasherService, SubscrubeModule, WeatherModule, EventModule],
+  providers: [HasherService, SubscribeModule, WeatherModule, EventModule],
 })
 export class AppModule {}

@@ -1,32 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import e from 'express';
-import { Producer, Kafka } from 'kafkajs';
+import { Injectable, Logger } from '@nestjs/common';
+import { Producer } from 'kafkajs';
 import { AsyncMessage } from './dto/kafka.dto';
-
+import { Kafka } from 'kafkajs';
+import kafkaConfig from 'src/configs/kafka.config';
 @Injectable()
 export class KafkaService {
+  private readonly logger = new Logger(KafkaService.name);
   private producer: Producer;
 
   constructor() {
-    const kafka = new Kafka({
-      clientId: 'notifier',
-      brokers: ['localhost:9092'],
-    });
-
+    const kafka = new Kafka(kafkaConfig);
     this.producer = kafka.producer();
     this.connect();
   }
 
-  private async connect() {
+  private async connect(): Promise<void> {
     try {
       await this.producer.connect();
-      console.log('Connected to Kafka');
+      this.logger.log('Connected to Kafka');
     } catch (error) {
-      console.error('Failed to connect to Kafka', error);
+      this.logger.error('Failed to connect to Kafka', error);
     }
   }
 
-  async write(topic: string, key: string, message: AsyncMessage) {
+  async write(
+    topic: string,
+    key: string,
+    message: AsyncMessage,
+  ): Promise<void> {
     try {
       await this.producer.send({
         topic,
@@ -37,13 +38,14 @@ export class KafkaService {
           },
         ],
       });
-      return true;
+      this.logger.log('Message sent to Kafka', key);
     } catch (error) {
-      throw new Error('Failed to write to Kafka', error);
+      this.logger.error('Failed to write to Kafka', error);
     }
   }
 
-  async disconnect() {
+  async disconnect(): Promise<void> {
     await this.producer.disconnect();
+    this.logger.log('Disconnected from Kafka');
   }
 }

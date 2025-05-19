@@ -5,20 +5,26 @@ import { WeatherWithCityDto } from '../weather/dto/weather.dto';
 
 @Injectable()
 export class MailtraDemoApiService implements MailsService {
-  private readonly transport: nodemailer.Transporter;
   logger = new Logger(MailtraDemoApiService.name);
+
+  private readonly transport: nodemailer.Transporter;
+  private readonly host = process.env.MAILTRAP_HOST;
+  private readonly port = Number(process.env.MAILTRAP_PORT);
+  private readonly user = process.env.MAILTRAP_USER;
+  private readonly pass = process.env.MAILTRAP_PASS;
 
   constructor() {
     this.transport = nodemailer.createTransport({
-      host: 'sandbox.smtp.mailtrap.io',
-      port: 2525,
+      host: this.host,
+      port: this.port,
       auth: {
-        user: '18db126378bbd8',
-        pass: '7106eed43b0fa3',
+        user: this.user,
+        pass: this.pass,
       },
     });
   }
 
+  //TO DO repalce with template and moove to another file with templates
   async sendWeatherMail(
     email: string,
     weather: WeatherWithCityDto,
@@ -31,6 +37,7 @@ export class MailtraDemoApiService implements MailsService {
     await this.sendMail(email, subject, content);
   }
 
+  //TO DO repalce with template and moove to another file with templates
   async sendRegistrationMail(email: string, token: string): Promise<void> {
     const subject = 'Registration Notification';
     const content = `<p>Hello ${email},</p>

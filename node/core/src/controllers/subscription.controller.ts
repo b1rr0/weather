@@ -42,7 +42,6 @@ export class SubscriptionController {
   @ApiResponse({ status: 400, description: 'Invalid token' })
   @ApiResponse({ status: 404, description: 'Token not found' })
   async confirmSubscription(@Param('token') token: string): Promise<void> {
-    console.log('token', token);
     await this.subscribeService.confirmSubscription(token);
   }
 

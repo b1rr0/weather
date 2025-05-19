@@ -10,7 +10,6 @@ export class WeatherNotificationController {
 
   @MessagePattern(Topic.WEATHER)
   async handleWeatherMessage(@Payload() message: AsyncMessage) {
-    console.log('message', message);
     if (!message) {
       this.logger.warn('Received empty message');
       return;
@@ -21,7 +20,6 @@ export class WeatherNotificationController {
 
   @MessagePattern(Topic.SUBSCRIPTION)
   async handleRegistrationMessage(@Payload() message: AsyncMessage) {
-    console.log('message', message);
 
     if (!message) {
       this.logger.warn('Received empty message');

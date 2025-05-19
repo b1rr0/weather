@@ -5,17 +5,21 @@ import {
   PrimaryGeneratedColumn,
   Column,
   Entity,
+  Index,
 } from 'typeorm';
 
 @Entity('subscriptions')
+@Index(['subscribeType', 'isConfirmed'])
 export class SubsribeEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
+  @Index()
   @Column({
     type: 'varchar',
     name: 'email',
     nullable: false,
+    unique: true,
   })
   email: string;
 
@@ -34,10 +38,12 @@ export class SubsribeEntity {
   })
   isConfirmed: boolean;
 
+  @Index()
   @Column({
     type: 'varchar',
     name: 'token',
     nullable: true,
+    unique: true,
   })
   token: string;
 

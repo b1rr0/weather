@@ -1,9 +1,9 @@
 import { Module } from '@nestjs/common';
 import { CronService } from './cron.service';
 import { EventModule } from 'src/doments/event/event.module';
-import { SubscrubeModule } from 'src/doments/subscription/subscrube.module';
+import { SubscribeModule } from 'src/doments/subscription/subscribe.module';
 @Module({
-  imports: [EventModule, SubscrubeModule],
+  imports: [EventModule, SubscribeModule],
   providers: [CronService],
 })
 export class CronModule {}

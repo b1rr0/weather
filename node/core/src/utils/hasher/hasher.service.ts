@@ -3,8 +3,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class HasherService {
-  private readonly SALT = '$2b$10$KPlqYXtq5.4zsHcDmM.Sd.';
-  //process.env.SALT; // $2b$10$KPlqYXtq5.4zsHcDmM.Sd.
+  private readonly SALT = process.env.SALT || bcrypt.genSaltSync(10);
 
   async hashData(data: string): Promise<string> {
     return bcrypt.hash(data, this.SALT);

@@ -5,7 +5,7 @@ This is a microservice-based weather application that consists of multiple servi
 
 ## Architecture
 The system architecture is documented in our [diagrams.net](https://app.diagrams.net/?src=about#G1RTMtS7c_OcROmCssMEXr2HzQwzmOCGZr#%7B%22pageId%22%3A%22UOtl7gYO2UXAUBC-fHZp%22%7D) diagram.
-
+![Image](https://github.com/user-attachments/assets/0a7ea467-4fe2-4d8c-95a7-35b04484fc3f)
 ## Getting Started
 
 ### Prerequisites
@@ -14,16 +14,3 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 
 ### Running the Application
 docker-compose up --build
-```
-
-### Notifier Service
-The notifier service requires additional setup. Please refer to the specific README file within the notifier service directory for detailed instructions.
-
-## Microservices
-Each microservice contains its own documentation. Please refer to the README files within each service directory for specific details.
-
-## Architecture Details
-The system is designed with a microservices architecture, where each service has a specific responsibility:
-- App service: Main application service
-- Notifier service: Handles notifications
-- Additional services as documented in the architecture diagram

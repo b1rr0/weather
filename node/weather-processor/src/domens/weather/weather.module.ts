@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { RecentWeatherRepository } from './recent.weather.repo';
 import { WeatherapiService } from '../weatherapi.service';
-import { WeatherProcessorService } from './weather.processorService.service';
+import { WeatherProcessorService } from './weather.processor.service';
 @Module({
   providers: [
     WeatherProcessorService,

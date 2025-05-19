@@ -1,5 +1,5 @@
 import { Controller, Get, Query } from '@nestjs/common';
-import { WeatherProcessorService } from '../domens/weather/weather.processorService.service';
+import { WeatherProcessorService } from '../domens/weather/weather.processor.service';
 
 @Controller()
 export class WeatherController {

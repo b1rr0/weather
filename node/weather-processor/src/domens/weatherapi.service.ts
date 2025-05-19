@@ -4,7 +4,7 @@ import { WeatherDto } from './weather/dto/weather.dto';
 
 @Injectable()
 export class WeatherapiService {
-  private readonly API_KEY = 'd5edf1e564154fbc88b224149251405';
+  private readonly API_KEY = process.env.WEATHER_API_KEY;
   private readonly BASE_URL = 'http://api.weatherapi.com/v1/current.json';
 
   async calculateWeather(city: string): Promise<WeatherDto> {

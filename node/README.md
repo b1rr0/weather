@@ -19,8 +19,7 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 Cache
 ### Running the Application
 docker-compose up --build 
-And go there
-#http://localhost:3330/v1/swagger#/
+And go there http://localhost:3330/v1/swagger#/
 
 
 ### Migrations are managed as part of Docker — 'migrations'

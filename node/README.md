@@ -13,18 +13,16 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 ### Prerequisites
 - Docker
 - Docker Compose
-- Read notifier. README.md (for emails) 
+- Read notifier. README.md (for reciving emails) 
 
 
 Cache
 ### Running the Application
-docker-compose up --build 
+<pre><code>bash docker-compose up --build</code></pre>
 And go there http://localhost:3330/v1/swagger#/
-
-
-### Migrations are managed as part of Docker — 'migrations'
-###  Because it's a separate job and is triggered independently (not the best practice, but a workaround to make it work on startup)
-
+#
+Migrations are managed as part of Docker — 'migrations'
+Because it's a separate job and is triggered independently (not the best practice, but a workaround to make it work on startup)
 
 # improvements:
 1) 1 Cache instance for 2 Microservice — intended to facilitate local development.

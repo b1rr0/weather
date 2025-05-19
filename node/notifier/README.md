@@ -32,6 +32,7 @@ Note: The `.env` file is included in the repository. While this is not a best pr
 
 Due to some issues with direct SMTP server configuration, the service uses Mailtrap as a test SMTP server. This allows for safe testing of email functionality without the risk of sending actual emails to users. In a production environment, this should be replaced with a proper SMTP server configuration.
 
+![Image](https://github.com/user-attachments/assets/6244e31f-6b74-4d22-949e-ed1a245224f7)
 To use this service, you need to:
 1. Create an account at [Mailtrap.io](https://mailtrap.io/)
 2. Get your SMTP credentials from the Mailtrap dashboard

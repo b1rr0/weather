@@ -15,8 +15,18 @@ The system architecture is documented in our [diagrams.net](https://app.diagrams
 - Docker Compose
 - Read notifier. README.md (for emails) 
 
+
+Cache
 ### Running the Application
 docker-compose up --build
 
 ### Migrations are managed as part of Docker — 'migrations'
 ###  Because it's a separate job and is triggered independently (not the best practice, but a workaround to make it work on startup)
+
+
+# improvements:
+1) 1 Cache instance for 2 Microservice — intended to facilitate local development.
+2) Add e2e test
+3) gRPC with weather-processor
+4) setup SMTP server:)
+5) improvements core (documented in the core README)"

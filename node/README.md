@@ -31,5 +31,6 @@ APP wasn’t deployed because it contains a lot of services and I didn’t have 
 3) gRPC with weather-processor
 4) setup SMTP server:)
 5) improvements core (documented in the core README)"
-5) add DLQ for kafka
+6) add DLQ for kafka
+7) make end-to-end monitoring
 
